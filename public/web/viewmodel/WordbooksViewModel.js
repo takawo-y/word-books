@@ -12,6 +12,7 @@ var ViewModel = function() {
 	self.wordBookId = ko.observable();
 	self.wordBookName = ko.observable();
 
+ 	self.displayButtonRegist = ko.observable(false);  //単語帳新規登録ボタン
 	self.displayButtonRegistCard = ko.observable(false);  //カード新規登録ボタン
 
 	self.wordbooksData = ko.observable();  //単語帳一覧データ
@@ -32,10 +33,12 @@ var ViewModel = function() {
 			self.title('Word book List');
 			self.wordBookId(null);
 			self.wordBookName(null);
+			self.displayButtonRegist(true);
 			self.displayButtonRegistCard(false);  //カード新規登録ボタン
 			self.wordbooksData(data);
 			self.displayRegister(false);
-			self.cardsData(null);
+		 	self.displayCardRegister(false);
+		 	self.cardsData(null);
 		});
 	};
 	//登録画面を表示
@@ -46,6 +49,7 @@ var ViewModel = function() {
 		self.wordbooksData(null);
 		self.cardsData(null);
 		self.displayRegister(true);
+		self.displayCardRegister(false);  //カード登録画面
 		self.displayButtonRegistCard(false);  //カード新規登録ボタン
 		self.regist_wordBookName(null);
 		self.regist_biko(null);
@@ -90,18 +94,20 @@ var ViewModel = function() {
 			self.title('Cards List ('+ wordbook.word_book_name +')');
 			self.wordbooksData(null);
 			self.displayRegister(false);
+		 	self.displayButtonRegist(false);
 			self.displayButtonRegistCard(true);  //カード新規登録ボタン
 			self.cardsData(data);
 		});
 	};
 	//カード登録画面
-	self.goToCardRegister = function(card){
+	self.goToCardRegister = function(){
 		self.title('Card Addition (' + self.wordBookName() + ')');
+	 	self.displayButtonRegist(false);
 		self.wordbooksData(null);  //単語帳一覧データ
 		self.cardsData(null);  //カード一覧データ
 		self.displayRegister(false);  //単語帳登録画面
-		self.message(null);  //メッセージ
 		self.displayCardRegister(true);  //カード登録画面
+		self.message(null);  //メッセージ
 		self.regist_cardFront(null);  //カード登録 表
 		self.regist_cardBack(null);  //カード登録 裏
 

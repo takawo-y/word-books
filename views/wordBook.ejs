@@ -51,7 +51,7 @@
 	<button type="button" class="btn btn-primary" data-bind="click: $root.getWordbooks">
 		<span class="glyphicon glyphicon-refresh">単語帳一覧取得</span>
 	</button>
-	<button type="button" class="btn btn-warning" data-bind="click: $root.goToRegister">
+	<button type="button" class="btn btn-warning" data-bind="click: $root.goToRegister, visible: displayButtonRegist">
 		<span class="glyphicon glyphicon-plus">単語帳新規作成</span>
 	</button>
 	<button type="button" class="btn btn-warning" data-bind="click: $root.goToCardRegister, visible: displayButtonRegistCard">
@@ -121,7 +121,7 @@
 		</table>
 
 		<!-- カード新規登録 -->
-		<div data-bind="if: displayCardRegister">
+		<div data-bind="visible: displayCardRegister">
 			<span>表：</span><p class="text-muted">　　skill</p>
 			<div class="form-group">
 				<div class="col-md-4">
