@@ -15,5 +15,9 @@ router.get('/:id', function(req, res) {
 	});
 });
 
+/** 単語帳カード新規登録 **/
+router.post('/', function(req, res){
+
+});
 
 module.exports = router;

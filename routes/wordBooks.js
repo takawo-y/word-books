@@ -26,7 +26,7 @@ router.post('/', function(req, res){
 	 	biko: req.body.biko
 	},function(err, result){
 		if(!err){
-			res.send({'message': '登録が完了しました'});
+			res.send({'message': '単語帳の登録が完了しました'});
 		}else{
 			res.send({'error': 'An error has occurred - ' + err});
 		}
@@ -52,4 +52,21 @@ router.get('/:id/cards', function(req, res) {
 		res.send({cards: cards});
 	});
 });
+
+/** 単語帳カード新規登録 **/
+router.post('/:id/cards', function(req, res){
+	var objectId = ObjectID.createFromHexString(req.params.id);
+	cardModel.create({
+		word_book_id: objectId,
+		front_card: req.body.front_card,
+		back_card: req.body.back_card
+	}, function(err, result){
+		if(!err){
+			res.send({message: 'カードの登録が完了しました'});
+		}else{
+			res.send({'error': 'An error has occurred - ' + err});
+		}
+	});
+});
+
 module.exports = router;

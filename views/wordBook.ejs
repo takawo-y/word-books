@@ -52,8 +52,12 @@
 		<span class="glyphicon glyphicon-refresh">単語帳一覧取得</span>
 	</button>
 	<button type="button" class="btn btn-warning" data-bind="click: $root.goToRegister">
-		<span class="glyphicon glyphicon-plus">新規作成</span>
-	</button><br /><br />
+		<span class="glyphicon glyphicon-plus">単語帳新規作成</span>
+	</button>
+	<button type="button" class="btn btn-warning" data-bind="click: $root.goToCardRegister, visible: displayButtonRegistCard">
+		<span class="glyphicon glyphicon-plus">カード新規作成</span>
+	</button>
+	<br /><br />
 	<span data-bind="text: message"></span>
 	<div class="row">
 		<!-- 単語帳一覧 -->
@@ -67,7 +71,7 @@
 			</tr>
 			</thead>
 			<tbody data-bind="foreach: wordbooks">
-			<tr data-bind="click: $root.goCards">
+			<tr>
 				<td data-bind="text: ($index()+1)"></td>
 				<td data-bind="text: word_book_name"></td>
 				<td data-bind="text: biko"></td>
@@ -116,6 +120,26 @@
 			</tbody>
 		</table>
 
+		<!-- カード新規登録 -->
+		<div data-bind="if: displayCardRegister">
+			<span>表：</span><p class="text-muted">　　skill</p>
+			<div class="form-group">
+				<div class="col-md-4">
+					<input type="text" id="card_front" class="form-control" data-bind="value: regist_cardFront">
+				</div>
+			</div><br /><br />
+			<span>裏：</span>&nbsp;&nbsp;<p class="text-muted">　　ス[キ]ル　技能,腕前,スキル</p>
+			<div class="form-group">
+				<div class="col-md-4">
+					<textarea rows="4" id="card_back" class="form-control" data-bind="value: regist_caradBack"></textarea>
+					<br /><br />
+					<button type="submit" class="btn btn-primary" data-bind="click: $root.registCard">
+						<span class="glyphicon glyphicon-send"> 登録 </span>
+					</button>
+				</div>
+			</div><br /><br />
+		</div>
+
 	</div><!-- /.row -->
 </div><!-- /.container -->
 
@@ -125,6 +149,6 @@
 <script type='text/javascript' src="\js\knockout-3.1.0.js"></script>
 <script type='text/javascript' src="\js\bootstrap.min.js"></script>
 <script type='text/javascript' src="\js\sammy-latest.min.js"></script>
-<script type='text/javascript' src="\web\WordbooksViewModel.js"></script>
+<script type='text/javascript' src="\web\viewmodel\WordbooksViewModel.js"></script>
 </body>
 </html>
