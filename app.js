@@ -15,7 +15,9 @@ mongoose.connect(uriString);
 
 // view engine setup
 app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+//app.set('view engine', 'ejs');
+app.engine('html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 app.use(favicon());
 app.use(logger('dev'));

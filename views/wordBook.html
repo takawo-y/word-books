@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title data-bind="text: title"></title>
+	<link href="/css/bootstrap.min.css" rel="stylesheet" media="screen">
+</head>
+<body style="padding-top: 30px;" onload="">
+<nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
+	<!-- Brand and toggle get grouped for better mobile display -->
+	<div class="navbar-header">
+		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+			<span class="sr-only">Toggle navigation</span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+		</button>
+		<a class="navbar-brand" href="/">１ヶ月で作ってみました</a>
+	</div>
+
+	<!-- Collect the nav links, forms, and other content for toggling -->
+	<div class="collapse navbar-collapse navbar-ex1-collapse">
+		<ul class="nav navbar-nav">
+			<li><a href="index.html">ホーム</a></li>
+			<li class="dropdown">
+				<a href="learning.html" class="dropdown-toggle" data-toggle="dropdown">はじめに <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="learn-bootstrap.html">Bootstrap とは？</a></li>
+					<li><a href="how-to-use.html">Bootstrap3 導入の仕方</a></li>
+					<li><a href="html.html">基本のHTMLコード</a></li>
+				</ul>
+			</li>
+			<li class="dropdown">
+				<a href="css.html" class="dropdown-toggle" data-toggle="dropdown">CSS <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					<li><a href="css.html#grid-system">グリッドシステム</a></li>
+					<li><a href="css.html#type">タイポグラフィ</a></li>
+					<li><a href="css.html#code">コードの表示</a></li>
+				</ul>
+			<li><a href="http://www.hrgrweb.com">hrgrweb.com</a></li>
+		</ul>
+	</div><!-- /.navbar-collapse -->
+</nav>
+
+<div class="jumbotron">
+	<div class="container">
+		<h1 data-bind="text: title"></h1>
+	</div>
+</div>
+<div class="container">
+	<button type="button" class="btn btn-primary" data-bind="click: getWordbooks">
+		<span class="glyphicon glyphicon-refresh">単語帳一覧取得</span>
+	</button>
+	<button type="button" class="btn btn-warning" data-bind="click: goToWordRegister, visible: displayButtonRegist">
+		<span class="glyphicon glyphicon-plus">単語帳新規作成</span>
+	</button>
+	<button type="button" class="btn btn-warning" data-bind="click: goToCardRegister, visible: displayButtonRegistCard">
+		<span class="glyphicon glyphicon-plus">カード新規作成</span>
+	</button>
+	<br /><br />
+	<span data-bind="text: message"></span>
+</div><!-- /.container -->
+
+<!-- 単語帳一覧 -->
+<div class="container"  data-bind="with: wordbooksData">
+	<table class="table table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>No.</th>
+			<th>単語帳名</th>
+			<th>備考</th>
+			<th>処理</th>
+		</tr>
+		</thead>
+		<tbody data-bind="foreach: wordbooks">
+		<tr data-bind="click: $root.getCards">
+			<td data-bind="text: ($index()+1)"></td>
+			<td data-bind="text: word_book_name"></td>
+			<td data-bind="text: biko"></td>
+			<td><button type="button" class="btn btn-default btn-xs" data-bind="click: $root.deleteWordbook">削除</button></td>
+		</tr>
+		</tbody>
+	</table>
+</div><!-- /.container -->
+
+<!-- カード一覧 -->
+<div class="container" data-bind="with: cardsData">
+	<table class="table table-bordered table-hover">
+		<thead>
+		<tr>
+			<th>No.</th>
+			<th>Front</th>
+			<th>Back</th>
+			<th>処理</th>
+		</tr>
+		</thead>
+		<tbody data-bind="foreach: cards">
+		<tr data-bind="click: $root.goCards">
+			<td data-bind="text: ($index()+1)"></td>
+			<td data-bind="text: front_card"></td>
+			<td data-bind="text: back_card"></td>
+			<td><button type="button" class="btn btn-default btn-xs" data-bind="click: $root.deleteCard">削除</button></td>
+		</tr>
+		</tbody>
+	</table>
+</div><!-- /.container -->
+
+<!-- 単語帳新規登録 -->
+<div  class="container" data-bind="visible: displayRegister">
+	<span class="glyphicon glyphicon-book">単語帳名：</span><p class="text-muted">　　英単語帳</p>
+	<div class="form-group">
+		<div class="col-md-4">
+			<input type="text" id="word_book_name" class="form-control" data-bind="value: regist_wordBookName" />
+		</div>
+	</div><br /><br />
+	<span class="glyphicon glyphicon-exclamation-sign">備考：</span>&nbsp;&nbsp;<p class="text-muted">　　英単語の勉強用</p>
+	<div class="form-group">
+		<div class="col-md-4">
+			<input type="text" id="biko" class="form-control" data-bind="value: regist_biko" />
+		</div>
+	</div><br /><br />
+	<button type="button" class="btn btn-primary" id="button_regist_wordbook" data-bind="click: registWordbooks">
+		<span class="glyphicon glyphicon-send"> 単語帳登録 </span>
+	</button>
+</div>
+
+<!-- カード新規登録 -->
+<div class="container" data-bind="visible: displayCardRegister">
+	<span>表：</span><p class="text-muted">　　skill</p>
+	<div class="form-group">
+		<div class="col-md-4">
+			<input id="card_front" class="form-control" data-bind="value: regist_cardFront" />
+		</div>
+	</div><br /><br />
+	<span>裏：</span>&nbsp;&nbsp;<p class="text-muted">　　ス[キ]ル　技能,腕前,スキル</p>
+	<div class="form-group">
+		<div class="col-md-4">
+			<textarea cols="55" rows="4" data-bind="value: regist_cardBack"></textarea>
+			<br /><br />
+			<button type="button" class="btn btn-primary" data-bind="click: registCard">
+				<span class="glyphicon glyphicon-send"> カード登録 </span>
+			</button>
+		</div>
+	</div><br /><br />
+</div>
+
+<script type='text/javascript' src="\js\jquery-2.1.1.min.js"></script>
+<script type='text/javascript' src="\js\knockout-3.1.0.js"></script>
+<script type='text/javascript' src="\js\bootstrap.min.js"></script>
+<script type='text/javascript' src="\js\sammy-latest.min.js"></script>
+<script type='text/javascript' src="\web\viewmodel\WordbooksViewModel.js"></script>
+</body>
+</html>

@@ -31,19 +31,21 @@ var ViewModel = function() {
 	self.getWordbooks = function(){
 		$.get('/wordbooks', function(data){
 			self.title('Word book List');
+			self.message(null);
 			self.wordBookId(null);
 			self.wordBookName(null);
 			self.displayButtonRegist(true);
 			self.displayButtonRegistCard(false);  //カード新規登録ボタン
 			self.wordbooksData(data);
+			self.cardsData(null);
 			self.displayRegister(false);
 		 	self.displayCardRegister(false);
-		 	self.cardsData(null);
 		});
 	};
-	//登録画面を表示
-	self.goToRegister = function() {
+	//単語帳登録画面を表示
+	self.goToWordRegister = function() {
 		self.title('Word book Addtion');
+		self.message(null);
 		self.wordBookId(null);
 		self.wordBookName(null);
 		self.wordbooksData(null);
@@ -92,6 +94,7 @@ var ViewModel = function() {
 			self.wordBookId(wordbook._id);
 			self.wordBookName(wordbook.word_book_name);
 			self.title('Cards List ('+ wordbook.word_book_name +')');
+			self.message(null);
 			self.wordbooksData(null);
 			self.displayRegister(false);
 		 	self.displayButtonRegist(false);
@@ -110,7 +113,42 @@ var ViewModel = function() {
 		self.message(null);  //メッセージ
 		self.regist_cardFront(null);  //カード登録 表
 		self.regist_cardBack(null);  //カード登録 裏
-
+	};
+	//カード新規登録
+	self.registCard = function(){
+		var wordBookId = self.wordBookId();
+		var postData ={
+			word_book_id: wordBookId,
+			front_card: self.regist_cardFront(),
+			back_card: self.regist_cardBack()
+		};
+		$.post('/wordbooks/'+wordBookId+'/cards', postData, function(rtn){
+			self.message(rtn.message);
+			$.get('/wordbooks/'+self.wordBookId()+'/cards', function(data){
+				self.title('Cards List ('+ wordbook.word_book_name +')');
+				self.cardsData(data);
+				self.displayRegister(false);
+				self.displayButtonRegist(false);
+				self.displayButtonRegistCard(true);  //カード新規登録ボタン
+			});
+		});
+	};
+	//カード削除
+	self.deleteCard = function(data){
+		$.ajax({
+			url: 'wordbooks/cards/'+data._id,
+			type: 'DELETE',
+			success: function(rtn){
+				self.message(rtn.message);
+				$.get('/wordbooks/'+self.wordBookId()+'/cards', function(data){
+					self.title('Cards List ('+ wordbook.word_book_name +')');
+					self.cardsData(data);
+					self.displayRegister(false);
+					self.displayButtonRegist(false);
+					self.displayButtonRegistCard(true);  //カード新規登録ボタン
+				});
+			}
+		});
 	};
 
 	//default

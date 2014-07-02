@@ -38,7 +38,7 @@ router.delete('/:id', function(req, res){
  var objectId = ObjectID.createFromHexString(req.params.id);
 	model.remove({'_id': objectId}, function(err){
 		if(!err){
-			res.send({'message': '削除が完了しました'});
+			res.send({'message': '単語帳の削除が完了しました'});
 		}else{
 			res.send({'error': 'An error has occurred - ' + err});
 		}
@@ -63,6 +63,18 @@ router.post('/:id/cards', function(req, res){
 	}, function(err, result){
 		if(!err){
 			res.send({message: 'カードの登録が完了しました'});
+		}else{
+			res.send({'error': 'An error has occurred - ' + err});
+		}
+	});
+});
+
+/** 単語帳カード削除 **/
+router.delete('/cards/:id', function(req, res){
+	var objectId = ObjectID.createFromHexString(req.params.id);
+	cardModel.remove({'_id': objectId}, function(err){
+		if(!err){
+			res.send({'message': 'カードの削除が完了しました'});
 		}else{
 			res.send({'error': 'An error has occurred - ' + err});
 		}
