@@ -78,11 +78,12 @@ var ViewModel = function() {
 				url: 'wordbooks/'+wordbook._id,
 				type: 'DELETE',
 				success: function(rtn){
-					self.message(rtn.message);
+					var mesg = rtn.message;
+				 	alert(rtn.message);
 					$.get('/wordbooks', function(data){
 						self.title('Word book List');
+						self.message(rtn.message);
 						self.wordbooksData(data);
-						self.displayRegister(false);
 						self.cardsData(null);
 					});
 				}
@@ -125,8 +126,9 @@ var ViewModel = function() {
 		$.post('/wordbooks/'+wordBookId+'/cards', postData, function(rtn){
 			self.message(rtn.message);
 			$.get('/wordbooks/'+self.wordBookId()+'/cards', function(data){
-				self.title('Cards List ('+ wordbook.word_book_name +')');
 				self.cardsData(data);
+				self.displayCardRegister(false);  //カード登録画面
+				self.title('Cards List ('+ wordbook.word_book_name +')');
 				self.displayRegister(false);
 				self.displayButtonRegist(false);
 				self.displayButtonRegistCard(true);  //カード新規登録ボタン
@@ -141,9 +143,10 @@ var ViewModel = function() {
 			success: function(rtn){
 				self.message(rtn.message);
 				$.get('/wordbooks/'+self.wordBookId()+'/cards', function(data){
-					self.title('Cards List ('+ wordbook.word_book_name +')');
 					self.cardsData(data);
+					self.title('Cards List ('+ wordbook.word_book_name +')');
 					self.displayRegister(false);
+					self.displayCardRegister(false);  //カード登録画面
 					self.displayButtonRegist(false);
 					self.displayButtonRegistCard(true);  //カード新規登録ボタン
 				});
