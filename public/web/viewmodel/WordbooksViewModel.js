@@ -17,6 +17,7 @@ var ViewModel = function() {
 
 	self.wordbooksData = ko.observable();  //単語帳一覧データ
 	self.cardsData = ko.observable();  //カード一覧データ
+	self.studyCard = ko.observable();  //勉強時のカードデータ
 
 	self.displayRegister = ko.observable(false);  //単語帳登録画面
 	self.regist_wordBookName = ko.observable();  //単語帳登録 単語帳名
@@ -25,6 +26,12 @@ var ViewModel = function() {
 	self.displayCardRegister = ko.observable(false);  //カード登録画面
 	self.regist_cardFront = ko.observable();  //カード登録 表
 	self.regist_cardBack = ko.observable();  //カード登録 裏
+
+	self.displayFront = ko.observable(false); //Study表
+	self.card_front = ko.observable(false);  //カード表
+	self.displayBack = ko.observable(false);  //Study裏
+	self.card_back = ko.observable(false);  //カード裏
+	self.numberStudy = ko.observable(0);  //カード枚数
 
 
 	//単語帳一覧取得
@@ -40,6 +47,12 @@ var ViewModel = function() {
 			self.cardsData(null);
 			self.displayRegister(false);
 		 	self.displayCardRegister(false);
+
+			self.displayFront(false); //Study表
+			self.card_front(false);  //カード表
+			self.displayBack(false);  //Study裏
+			self.card_back(false);  //カード裏
+			self.numberStudy(0);  //カード枚数
 		});
 	};
 	//単語帳登録画面を表示
@@ -79,7 +92,6 @@ var ViewModel = function() {
 				type: 'DELETE',
 				success: function(rtn){
 					var mesg = rtn.message;
-				 	alert(rtn.message);
 					$.get('/wordbooks', function(data){
 						self.title('Word book List');
 						self.message(rtn.message);
@@ -102,6 +114,38 @@ var ViewModel = function() {
 			self.displayButtonRegistCard(true);  //カード新規登録ボタン
 			self.cardsData(data);
 		});
+	};
+	//Study
+	self.study = function(wordbook){
+		$.get('/wordbooks/'+wordbook._id+'/cards', function(data){
+			self.cardsData(null);
+			self.wordBookId(wordbook._id);
+			self.wordBookName(wordbook.word_book_name);
+			self.title('Study ('+ wordbook.word_book_name +')');
+			self.message(null);
+			self.wordbooksData(null);
+			self.studyCard(data);
+			self.displayRegister(false);
+			self.displayButtonRegist(false);
+
+			self.displayFront(true);
+			self.card_front(data.cards[0].front_card);
+		});
+	};
+	//解答
+	self.anser = function(){
+		self.displayFront(false);
+		self.displayBack(true);
+		self.card_back(self.studyCard().cards[self.numberStudy()].back_card);
+
+	};
+	//次へ
+	self.nextCard = function(){
+		self.numberStudy(self.numberStudy()+1);
+		self.displayFront(true);
+		self.card_front(self.studyCard().cards[self.numberStudy()].front_card);
+		self.displayBack(false);
+
 	};
 	//カード登録画面
 	self.goToCardRegister = function(){
@@ -138,7 +182,7 @@ var ViewModel = function() {
 	//カード削除
 	self.deleteCard = function(data){
 		$.ajax({
-			url: 'wordbooks/cards/'+data._id,
+			url: '/wordbooks/cards/'+data._id,
 			type: 'DELETE',
 			success: function(rtn){
 				self.message(rtn.message);
@@ -153,6 +197,7 @@ var ViewModel = function() {
 			}
 		});
 	};
+
 
 	//default
 	self.getWordbooks();

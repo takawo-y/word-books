@@ -8,14 +8,11 @@
 
 var routes = require('./routes/index');
 var wordBooks = require('./routes/wordBooks');
-var cards = require('./routes/cards');
 
 
 module.exports = function(app){
 	app.use('/', routes);
 	app.use('/wordbooks', wordBooks);  //単語帳リスト
-
-	app.use('/cards/:id', wordBooks); //カード一覧
 
 }
 
